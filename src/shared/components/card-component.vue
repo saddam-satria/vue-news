@@ -9,24 +9,24 @@
     <div class="flex flex-col px-3 py-4 h-1/2">
       <div class="flex space-x-1 items-center">
         <v-icon name="fa-regular-user" class="text-medium text-gray-500" />
-        <span class="text-gray-400 text-xsmall">{{ author ? author : 'unknown' }}</span>
+        <span class="text-gray-400 text-xsmall">{{ author }}</span>
       </div>
       <div>
-        <a :href="url" class="text-decoration-none" target="_blank">
-          <span class="font-bold text-medium capitalize">{{ title!.length > 70 ? title!.slice(0, 70) + '...' : title }}</span>
+        <a @click="redirectHandler" :href="url" class="text-decoration-none" target="_blank">
+          <span class="font-bold text-medium capitalize">{{ title }}</span>
         </a>
       </div>
       <div>
-        <span v-if="description" class="text-gray-400 text-small">{{ description!.length > 150 ? description!.slice(0, 150) + '...' : description }}</span>
+        <span v-if="description" class="text-gray-400 text-small">{{ description }}</span>
       </div>
       <div class="flex space-x-2 mt-auto">
         <div class="flex space-x-1 items-center">
           <v-icon name="la-building-solid" class="text-medium text-gray-500" />
-          <span class="text-gray-400 text-xsmall">{{ source }}</span>
+          <span class="text-gray-400 text-xsmall">{{ source.name }}</span>
         </div>
         <div class="flex space-x-1 items-center">
           <v-icon name="bi-clock" class="text-medium text-gray-500" />
-          <span class="text-gray-400 text-xsmall">{{ moment(published).format('ddd, DD MMM HH.ss') }}</span>
+          <span class="text-gray-400 text-xsmall">{{ published }}</span>
         </div>
       </div>
     </div>
@@ -38,9 +38,34 @@ import { addIcons } from 'oh-vue-icons';
 import { FaRegularUser, FcLikePlaceholder, FcLike } from 'oh-vue-icons/icons';
 import { LaBuildingSolid } from 'oh-vue-icons/icons';
 import { BiClock } from 'oh-vue-icons/icons';
-import cardProps from '../props/card.props';
-import moment from 'moment';
+import Article, { Source } from '../models/Article';
 
 addIcons(FaRegularUser, LaBuildingSolid, BiClock, FcLikePlaceholder, FcLike);
-defineProps(cardProps);
+const props = defineProps<{
+  title: string;
+  image: string;
+  source: Source;
+  url: string;
+  description: string;
+  author: string;
+  published: string;
+  content: string;
+  readNews: (news: Article) => void;
+}>();
+
+const redirectHandler = () => {
+  props.readNews({
+    title: props.title,
+    urlToImage: props.image,
+    source: {
+      name: props.source.name,
+      id: props.source.id,
+    },
+    url: props.url,
+    description: props.description,
+    author: props.author,
+    publishedAt: props.published,
+    content: props.content,
+  });
+};
 </script>

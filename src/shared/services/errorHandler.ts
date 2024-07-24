@@ -12,8 +12,6 @@ const httpErrorHandler = (message: string) => {
 
   const statusCode = message.match(pattern);
 
-  console.log(statusCode);
-
   if (statusCode) {
     if (statusCodes.has(statusCode[0])) {
       return statusCodes.get(statusCode[0]);

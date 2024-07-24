@@ -1,5 +1,3 @@
-<script lang="ts" setup></script>
-
 <template>
   <div class="rounded-lg shadow-lg w-full h-80 justify-between flex flex-col">
     <div class="w-full h-1/2 bg-gray-100 rounded-t-lg"></div>
@@ -25,3 +23,5 @@
     </div>
   </div>
 </template>
+
+<script lang="ts" setup></script>

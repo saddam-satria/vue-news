@@ -1,3 +1,5 @@
+import Article from '../models/Article';
+
 export default {
   title: {
     type: String,
@@ -29,6 +31,10 @@ export default {
   },
   id: {
     type: Number,
+    required: true,
+  },
+  readNews: {
+    type: Function,
     required: true,
   },
 };
