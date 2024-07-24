@@ -1,0 +1,34 @@
+name: Development Env
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set Up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: "20.10"
+          cache: 'npm'
+      - name: Install Package
+        run: yarn install
+      - name: Unit Test
+        run: yarn run test
+      - name: Build Code
+        run: yarn build
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: deployment
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: dockerfiles/dev.dockerfile
+          push: false

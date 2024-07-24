@@ -1,5 +1,3 @@
-import Article from '../models/Article';
-
 export default {
   title: {
     type: String,

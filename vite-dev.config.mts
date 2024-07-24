@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/v1': {
-        target: 'https://newsapi.org',
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },
