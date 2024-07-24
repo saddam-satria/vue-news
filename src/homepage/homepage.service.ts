@@ -79,6 +79,7 @@ const HomePageService = {
   searchNews: (ref: FetchProps<Article[], (q?: string, page?: number, limit?: number) => void>, q = 'cnn') => {
     try {
       ref.loading.value = true;
+      ref.data.value = [];
       ref.action(q);
     } catch (error: any) {
       ref.errorMessage = error.message;
@@ -121,7 +122,7 @@ const HomePageService = {
       if (result) {
         updateReadNews({
           ...news,
-          lastReading: moment().add(7, 'hours').toISOString(),
+          lastReading: moment().toISOString(),
           count: result.count + 1,
         });
       }
@@ -129,11 +130,17 @@ const HomePageService = {
       if (!result) {
         createReadNews({
           ...news,
-          lastReading: moment().add(7, 'hours').toISOString(),
+          lastReading: moment().toISOString(),
           count: 1,
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      createReadNews({
+        ...news,
+        lastReading: moment().toISOString(),
+        count: 1,
+      });
+    }
   },
 };
 

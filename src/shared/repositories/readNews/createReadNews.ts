@@ -12,6 +12,7 @@ export default function createReadNews(payload: ReadArticle): ReadArticle | null
 
     return payload;
   } catch (error) {
+    localStorage.setItem(NEWS_STORAGE_KEY, JSON.stringify([payload]));
     return null;
   }
 }

@@ -6,21 +6,21 @@
       <span class="text-medium text-white capitalize">{{ news.errorMessage.value }}</span>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3">
-      <div v-if="!news.loading.value && news.data.value.length > 0" v-for="blog in news.data.value" class="h-48">
-        <card-component
-          :author="blog.author"
-          :content="blog.content"
-          :description="blog.description"
-          :published="blog.publishedAt"
-          :read-news="redirectTo"
-          :image="blog.urlToImage"
-          :source="blog.source"
-          :title="blog.title"
-          :last-reading="blog.lastReading"
-          :url="blog.url"
-        />
-      </div>
+    <div v-if="news.data.value.length > 0 && !news.errorMessage.value" class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+      <card-component
+        v-for="blog in news.data.value.sort((a, b) => b.count - a.count)"
+        :author="blog.author"
+        :content="blog.content"
+        :description="blog.description"
+        :published="blog.publishedAt"
+        :read-news="redirectTo"
+        :image="blog.urlToImage"
+        :source="blog.source"
+        :title="blog.title"
+        :last-reading="blog.lastReading"
+        :url="blog.url"
+        :count="blog.count"
+      />
     </div>
   </div>
 </template>
@@ -39,11 +39,11 @@ onMounted(() => {
   news.action();
 });
 
-const redirectTo = (news: Article) => {
-  newsReadService.readingNews(news);
+const redirectTo = (payload: Article) => {
+  newsReadService.readingNews(payload, news.data);
 
-  if (news.url) {
-    window.open(news.url, '_blank');
+  if (payload.url) {
+    window.open(payload.url, '_blank');
   }
 };
 </script>

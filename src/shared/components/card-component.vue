@@ -12,7 +12,7 @@
         <span class="text-gray-400 text-xsmall">{{ author }}</span>
       </div>
       <div>
-        <a @click="redirectHandler" :href="url" class="text-decoration-none" target="_blank">
+        <a @click="redirectHandler" class="text-decoration-none cursor-pointer">
           <span class="font-bold text-medium capitalize">{{ title }}</span>
         </a>
       </div>
@@ -43,13 +43,13 @@ import Article, { Source } from '../models/Article';
 addIcons(FaRegularUser, LaBuildingSolid, BiClock, FcLikePlaceholder, FcLike);
 const props = defineProps<{
   title: string;
-  image: string;
+  image?: string;
   source: Source;
   url: string;
-  description: string;
-  author: string;
+  description?: string;
+  author?: string;
   published: string;
-  content: string;
+  content?: string;
   readNews: (news: Article) => void;
 }>();
 

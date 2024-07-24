@@ -5,8 +5,9 @@ import createReadNews from '@/shared/repositories/readNews/createReadNews';
 import getDetailReadNews from '@/shared/repositories/readNews/getDetailReadNews';
 import getReadNews from '@/shared/repositories/readNews/getReadNews';
 import updateReadNews from '@/shared/repositories/readNews/updateReadNews';
+import convertDate from '@/shared/services/convertDate';
 import moment from 'moment';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 
 const NewsReadService = {
   routeName: 'news-read',
@@ -35,26 +36,47 @@ const NewsReadService = {
       action,
     };
   },
-  readingNews(news: Article) {
+  readingNews(news: Article, ref: Ref<ReadArticle[]>) {
     try {
       const result = getDetailReadNews(news.url);
+      const prevNews = ref.value.filter((blog) => blog.url !== news.url);
+      let updatedNews = result as ReadArticle;
 
       if (result) {
-        updateReadNews({
+        const response = updateReadNews({
           ...news,
-          lastReading: moment().add(7, 'hours').toISOString(),
+          lastReading: moment().toISOString(),
           count: result.count + 1,
         });
+        if (response) {
+          updatedNews = response;
+        }
       }
 
       if (!result) {
-        createReadNews({
+        const response = createReadNews({
           ...news,
-          lastReading: moment().add(7, 'hours').toISOString(),
+          lastReading: moment().toISOString(),
           count: 1,
         });
+
+        if (response) {
+          updatedNews = response;
+        }
       }
-    } catch (error) {}
+
+      ref.value = [...prevNews, { ...updatedNews, lastReading: convertDate(updatedNews.lastReading) }];
+    } catch (error) {
+      const response = createReadNews({
+        ...news,
+        lastReading: moment().toISOString(),
+        count: 1,
+      });
+
+      if (response) {
+        ref.value = [...ref.value.filter((blog) => blog.url !== news.url), { ...response, lastReading: convertDate(response.lastReading) }];
+      }
+    }
   },
 };
 

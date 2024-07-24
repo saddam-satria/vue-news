@@ -8,42 +8,61 @@
       <span class="text-medium text-white capitalize">{{ httpErrorHandler(news.errorMessage.value) }}</span>
     </div>
 
-    <div v-if="!headlineNews.loading.value && headlineNews.data.value.length > 0" class="grid grid-cols-1 lg:grid-cols-3 grid-rows-4 h-80 gap-1">
-      <div class="lg:row-span-4 lg:grid-rows-subgrid bg-blue-400">
-        <card-headline-component
-          :author="headline.get(0)!.author"
-          :image="headline.get(0)!.urlToImage"
-          :published-at="headline.get(0)!.publishedAt"
-          :source="headline.get(0)!.source.name"
-          :title="headline.get(0)!.title"
-        ></card-headline-component>
-      </div>
-      <div class="lg:grid-cols-subgrid lg:col-span-2 lg:grid-rows-subgrid lg:row-span-2 bg-blue-400">
-        <card-headline-component
-          :author="headline.get(1)!.author"
-          :image="headline.get(1)!.urlToImage"
-          :published-at="headline.get(1)!.publishedAt"
-          :source="headline.get(1)!.source.name"
-          :title="headline.get(1)!.title"
-        ></card-headline-component>
-      </div>
-      <div class="bg-blue-400 lg:grid-rows-subgrid lg:row-span-2">
-        <card-headline-component
-          :author="headline.get(2)!.author"
-          :image="headline.get(2)!.urlToImage"
-          :published-at="headline.get(2)!.publishedAt"
-          :source="headline.get(2)!.source.name"
-          :title="headline.get(2)!.title"
-        ></card-headline-component>
-      </div>
-      <div class="bg-blue-400 lg:row-span-2">
-        <card-headline-component
-          :author="headline.get(3)!.author"
-          :image="headline.get(3)!.urlToImage"
-          :published-at="headline.get(3)!.publishedAt"
-          :source="headline.get(3)!.source.name"
-          :title="headline.get(3)!.title"
-        ></card-headline-component>
+    <div v-if="!headlineNews.loading.value && headline.size > 3" class="flex flex-col space-y-4">
+      <span class="text-extra capitalize font-bold">Berita Terkini</span>
+      <div class="grid grid-cols-1 lg:grid-cols-3 grid-rows-4 h-full gap-1">
+        <div class="lg:row-span-4 lg:grid-rows-subgrid bg-blue-400">
+          <card-headline-component
+            :author="headline.get(0)!.author"
+            :image="headline.get(0)!.urlToImage"
+            :published-at="headline.get(0)!.publishedAt"
+            :source="headline.get(0)!.source"
+            :title="headline.get(0)!.title"
+            :content="headline.get(0)!.content"
+            :description="headline.get(0)!.description"
+            :url="headline.get(0)!.url"
+            :read-news="redirectTo"
+          ></card-headline-component>
+        </div>
+        <div class="lg:grid-cols-subgrid lg:col-span-2 lg:grid-rows-subgrid lg:row-span-2 bg-blue-400">
+          <card-headline-component
+            :author="headline.get(1)!.author"
+            :image="headline.get(1)!.urlToImage"
+            :published-at="headline.get(1)!.publishedAt"
+            :source="headline.get(1)!.source"
+            :title="headline.get(1)!.title"
+            :content="headline.get(1)!.content"
+            :description="headline.get(1)!.description"
+            :url="headline.get(1)!.url"
+            :read-news="redirectTo"
+          ></card-headline-component>
+        </div>
+        <div class="bg-blue-400 lg:grid-rows-subgrid lg:row-span-2">
+          <card-headline-component
+            :author="headline.get(2)!.author"
+            :image="headline.get(2)!.urlToImage"
+            :published-at="headline.get(2)!.publishedAt"
+            :source="headline.get(2)!.source"
+            :title="headline.get(2)!.title"
+            :content="headline.get(2)!.content"
+            :description="headline.get(2)!.description"
+            :url="headline.get(2)!.url"
+            :read-news="redirectTo"
+          ></card-headline-component>
+        </div>
+        <div class="bg-blue-400 lg:row-span-2">
+          <card-headline-component
+            :author="headline.get(3)!.author"
+            :image="headline.get(3)!.urlToImage"
+            :published-at="headline.get(3)!.publishedAt"
+            :source="headline.get(3)!.source"
+            :title="headline.get(3)!.title"
+            :content="headline.get(3)!.content"
+            :description="headline.get(3)!.description"
+            :url="headline.get(3)!.url"
+            :read-news="redirectTo"
+          ></card-headline-component>
+        </div>
       </div>
     </div>
 
@@ -51,22 +70,25 @@
       <card-skelton-component v-for="(_, index) in [0, 1, 2]" :key="index" @click="console.log(index)"></card-skelton-component>
     </div>
 
-    <div v-if="!news.loading.value" :class="`grid grid-cols-1 grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 gap-4`">
-      <card-component
-        v-for="(blog, index) in news.data.value"
-        :key="index"
-        :class="`${gridSystem.has(index) ? 'grid-rows-subgrid row-span-2' : ''}`"
-        :title="blog.title"
-        :description="blog.description"
-        :published="blog.publishedAt"
-        :author="blog.author"
-        :source="blog.source"
-        :image="blog.urlToImage"
-        :url="blog.url"
-        :id="index"
-        :content="blog.content"
-        :read-news="redirectTo"
-      />
+    <div v-if="!news.loading.value" class="flex flex-col space-y-4">
+      <span class="text-extra capitalize font-bold">Berita Lainnya</span>
+      <div :class="`grid grid-cols-1 grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 gap-4`">
+        <card-component
+          v-for="(blog, index) in news.data.value"
+          :key="index"
+          :class="`${gridSystem.has(index) ? 'grid-rows-subgrid row-span-2' : ''}`"
+          :title="blog.title"
+          :description="blog.description"
+          :published="blog.publishedAt"
+          :author="blog.author"
+          :source="blog.source"
+          :image="blog.urlToImage"
+          :url="blog.url"
+          :id="index"
+          :content="blog.content"
+          :read-news="redirectTo"
+        />
+      </div>
     </div>
 
     <div v-if="news.data.value.length > 0" class="flex justify-center">
@@ -105,7 +127,7 @@ onUpdated(() => {
   homeService.setGrid(gridSystem, news.data.value.length);
 
   if (headlineNews.data.value.length > 3) {
-    headlineNews.data.value.forEach((news, index) => {
+    headlineNews.data.value.slice(0, 4).forEach((news, index) => {
       headline.value.set(index, news);
     });
   }
